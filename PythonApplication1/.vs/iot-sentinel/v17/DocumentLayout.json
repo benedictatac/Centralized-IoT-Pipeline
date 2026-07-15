@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\atana\\Documents\\Github\\Centralized-IoT-Pipeline\\PythonApplication1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{68317126-1C3D-42DD-BA33-5DDA1EF6C3CE}|iot-sentinel.pyproj|C:\\Users\\atana\\Documents\\Github\\Centralized-IoT-Pipeline\\PythonApplication1\\pyproject.toml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{68317126-1C3D-42DD-BA33-5DDA1EF6C3CE}|iot-sentinel.pyproj|solutionrelative:pyproject.toml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{68317126-1C3D-42DD-BA33-5DDA1EF6C3CE}|iot-sentinel.pyproj|C:\\Users\\atana\\Documents\\Github\\Centralized-IoT-Pipeline\\PythonApplication1\\docker\\docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{68317126-1C3D-42DD-BA33-5DDA1EF6C3CE}|iot-sentinel.pyproj|solutionrelative:docker\\docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "docker-compose.yml",
+              "DocumentMoniker": "C:\\Users\\atana\\Documents\\Github\\Centralized-IoT-Pipeline\\PythonApplication1\\docker\\docker-compose.yml",
+              "RelativeDocumentMoniker": "docker\\docker-compose.yml",
+              "ToolTip": "C:\\Users\\atana\\Documents\\Github\\Centralized-IoT-Pipeline\\PythonApplication1\\docker\\docker-compose.yml",
+              "RelativeToolTip": "docker\\docker-compose.yml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2026-07-14T20:39:40.404Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "pyproject.toml",
+              "DocumentMoniker": "C:\\Users\\atana\\Documents\\Github\\Centralized-IoT-Pipeline\\PythonApplication1\\pyproject.toml",
+              "RelativeDocumentMoniker": "pyproject.toml",
+              "ToolTip": "C:\\Users\\atana\\Documents\\Github\\Centralized-IoT-Pipeline\\PythonApplication1\\pyproject.toml",
+              "RelativeToolTip": "pyproject.toml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAMAAAAAAAAAA==",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|",
+              "WhenOpened": "2026-07-14T17:45:21.064Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

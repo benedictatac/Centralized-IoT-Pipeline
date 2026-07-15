@@ -1,0 +1,49 @@
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[project]
+name = "iot-sentinel"
+authors = [
+
+{name = "Charles Benedict Atanacio", email = "atanaciocharles31@gmail.com"}, 
+
+]
+maintainers = [{name = "Charles Atanacio", email = "atanaciocharles31@gmail.com" }]
+description = "Real-time IoT event pipeline with ML-powered anomaly detection"
+version = "0.1.0"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+"Programming Language :: Python :: 3", 
+"Operating System :: OS Independent", 
+"Framework :: FastAPI", 
+"Development Status :: 1 - Planning", 
+]
+dependencies = [
+    "click>=8.1.0",
+    "paho-mqtt >= 2.0.0", 
+    "fastapi >= 0.112.0", 
+    "sqlalchemy[asyncio] >= 2.0.0", 
+    "redis >= 5.0.0",
+    "uvicorn[standard]>=0.29.0",
+    "scikit-learn >= 1.9.0",
+    "pydantic >= 2.13.4", 
+    "alembic >= 1.18.5", 
+    "asyncpg >= 0.31.0"
+]
+license = "MIT"
+
+[project.urls]
+repo = "https://github.com/benedictatac/Centralized-IoT-Pipeline"
+
+
+[project.optional-dependecies] 
+dev = [
+    "pytest >= 9.1.1", 
+    "ruff >= 0.15.21", 
+    "mypy >= 2.3.0", 
+]
