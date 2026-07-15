@@ -36,6 +36,7 @@
     <Folder Include="test\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".gitignore" />
     <Content Include="docker\docker-compose.yml" />
     <Content Include="pyproject.toml" />
   </ItemGroup>
