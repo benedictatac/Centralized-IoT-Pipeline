@@ -1,8 +1,11 @@
 from ast import main
+import asyncio
+from re import DEBUG
+import asyncpg.connection
 from paho.mqtt import client as mqtt_client
 import os 
 import redis
-import sqlalchemy
+import asyncpg
 
 
 #variables for MQTT broker
@@ -44,11 +47,26 @@ def connect_redis():
     except Exception as e: 
             print(f"Client Redis did not successfully connect due to {e}")
 
+async def connect_db():
 
+    
+    db_user = os.getenv("DB_USER", "postgres")
+    db_password = os.getenv("DB_PASSWORD", "mysecretlocalpassword")
+    db_port = os.getenv("DB_PORT", 5432)
+    db_name = os.getenv("DB_NAME", "iot_sentinel")
         
+    try:
+        client = await asyncpg.connect(f"postgresql://{db_user}:{db_password}@localhost:{db_port}/{db_name}")  
+        if client: 
+            print("Connection to SQL database server successful")
+    
+    except Exception as e:
+            print(f"Client not connected due to {e}")
+            
 if __name__ == '__main__':
     connect_mqtt()
     connect_redis()
+    asyncio.run(connect_db())
     
 
 
