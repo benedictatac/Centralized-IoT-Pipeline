@@ -1,4 +1,6 @@
 
 .vs/
 
-.env
+
+venv/
+.venv/

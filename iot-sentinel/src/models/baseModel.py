@@ -7,8 +7,6 @@ import string
 from datetime import datetime
 from enum import Enum, StrEnum
 
-from pydantic_core.core_schema import uuid_schema
-
 
 
 class DeviceType(StrEnum):

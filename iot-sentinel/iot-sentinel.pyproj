@@ -26,8 +26,10 @@
   <ItemGroup>
     <Compile Include="docker\mosquitto\config\passwd" />
     <Compile Include="src\models\baseModel.py" />
+    <Compile Include="src\models\__init__.py" />
     <Compile Include="src\pipeline\Helper_Config.py" />
     <Compile Include="src\__init__.py" />
+    <Compile Include="test\tests_module.py" />
     <Compile Include="test\test_connections.py" />
     <Compile Include="test\__init__.py" />
   </ItemGroup>

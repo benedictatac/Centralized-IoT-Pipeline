@@ -41,7 +41,7 @@ license = "MIT"
 repo = "https://github.com/benedictatac/Centralized-IoT-Pipeline"
 
 
-[project.optional-dependecies] 
+[project.optional-dependencies] 
 dev = [
     "pytest >= 9.1.1", 
     "ruff >= 0.15.21", 
