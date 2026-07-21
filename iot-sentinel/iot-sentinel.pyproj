@@ -5,7 +5,7 @@
     <ProjectGuid>68317126-1c3d-42dd-ba33-5dda1ef6c3ce</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>test\test_connections.py</StartupFile>
+    <StartupFile>src\models\baseModel.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -25,6 +25,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="docker\mosquitto\config\passwd" />
+    <Compile Include="src\models\baseModel.py" />
     <Compile Include="src\pipeline\Helper_Config.py" />
     <Compile Include="src\__init__.py" />
     <Compile Include="test\test_connections.py" />
@@ -53,6 +54,7 @@
     <Content Include="docker\mosquitto\config\mosquitto.conf" />
     <Content Include="pyproject.toml" />
     <Content Include="README.md" />
+    <Content Include="src\pipeline\json_dataStructure.json" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.12" />
