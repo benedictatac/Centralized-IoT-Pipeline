@@ -1,0 +1,6 @@
+
+### MAIN TEST HELPER THAT INCLDES FUNCTIONS, ARBRITRARY VALUES AND CONST MEMBERS ### 
+
+import json 
+import os 
+#should include
