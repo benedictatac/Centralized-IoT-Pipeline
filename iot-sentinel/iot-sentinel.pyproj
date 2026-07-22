@@ -12,7 +12,7 @@
     <OutputPath>.</OutputPath>
     <Name>iot-sentinel</Name>
     <RootNamespace>PythonApplication1</RootNamespace>
-    <InterpreterId>Global|PythonCore|3.12</InterpreterId>
+    <InterpreterId>MSBuild|venv|$(MSBuildProjectFullPath)</InterpreterId>
     <SuppressConfigureTestFrameworkPrompt>true</SuppressConfigureTestFrameworkPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -28,6 +28,7 @@
     <Compile Include="src\models\baseModel.py" />
     <Compile Include="src\models\__init__.py" />
     <Compile Include="src\pipeline\Helper_Config.py" />
+    <Compile Include="src\pipeline\__init__.py" />
     <Compile Include="src\__init__.py" />
     <Compile Include="test\tests_module.py" />
     <Compile Include="test\test_connections.py" />
@@ -54,12 +55,24 @@
     <Content Include=".gitignore" />
     <Content Include="docker-compose.yml" />
     <Content Include="docker\mosquitto\config\mosquitto.conf" />
+    <Content Include="docker\mosquitto\data\randomData.json" />
     <Content Include="pyproject.toml" />
     <Content Include="README.md" />
     <Content Include="src\pipeline\json_dataStructure.json" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.12" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="venv\">
+      <Id>venv</Id>
+      <Version>3.12</Version>
+      <Description>venv (Python 3.12 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

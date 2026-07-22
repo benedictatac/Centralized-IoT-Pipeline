@@ -1,0 +1,16 @@
+{
+  "device_type": "CAMERA",
+  "device_id": "62301949-c0f9-4afa-abe9-fc198a41b813",
+  "device_name": "MyDevice",
+  "timestamp": "2026-10-31 23:59:00",
+  "status": "ACTIVE",
+  "readings": [
+    {
+      "metric": "TEMPERATURE", "unit":  "CELSIUS", "value": 4.0
+    }
+
+  ]
+
+
+
+}
