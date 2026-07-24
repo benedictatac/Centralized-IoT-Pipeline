@@ -14,44 +14,13 @@ from pathlib import Path
 #specific method with hardcoded values from dev user's 
 def CreateValidDevice(deviceType,deviceUUID, deviceName, date, readings: list[Reading]) -> Device:
     
-    try: 
-        device = Device(deviceType, deviceUUID, deviceName, date, readings)
-        if device == Device:
-            print("Device successfully created!")
-            return device
-    except Exception as e: 
-        print(f"Device was not successfully created due to {e}")
-
-
-#creating device from json values 
-def create_device_from_json(json_str:str) -> Device: 
-    data = json.loads(json_str)
-
-
-    readings = [
-        Reading(
-            metric = Metric(item["metric"]), 
-            unit = Unit(item["unit"]), 
-            value = item["value"])
-            
-        for item in data.get("readings", [])
-        ]
-
-    return Device(
-            device_type=DeviceType(data["device_type"]), 
-            device_id = UUID(data["device_id"]), 
-            device_name=data["device_name"], 
-            timestamp=data["timestamp"], 
-            status = DeviceStatus(data["status"]), 
-            readings=readings
-        )
+        device = Device(device_type = deviceType, device_uuid = deviceUUID, device_name = deviceName, timestamp=date, readings =readings)
+        return device
 
 
 #using Pydantic already built in function in parsing json 
 # already handles type conversion, validation, and error  reporting automatically when given the types models 
-def create_device_from_json2(file_path: Path) -> Device:
-
-
+def Create_Device_From_Json2(file_path: Path) -> Device:
     with open(file_path, 'r') as f:
         data = json.load(f)
     return Device(**data)

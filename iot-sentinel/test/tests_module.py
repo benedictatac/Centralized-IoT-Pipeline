@@ -1,4 +1,5 @@
 from importlib import metadata
+from os import read
 import pathlib
 
 from click import File
@@ -22,17 +23,23 @@ DEVICEID = uuid.uuid4()
 DEVICENAME = "Charles' device"
 DAYTIME = datetime.now()
 STATUS = DeviceStatus.ACTIVE
-MOVEMENT = Reading.metric =Metric.MOVEMENT
-UNIT = Reading.unit = Unit.CELSIUS
+MOVEMENT = Metric.MOVEMENT
+UNIT = Unit.CELSIUS
 VALUE = 2.0
-READING = [MOVEMENT, UNIT, VALUE]
-
+INVALID_VALUE = "BANANA"
 #endregion
 
 #region testCases
+
+@pytest.fixture
+def test_createDevice():
+       return  Device(device_type=DEVICETYPE, device_id=DEVICEID, device_name=DEVICENAME,
+                    timestamp=DAYTIME, status=STATUS, readings = [Reading(metric=MOVEMENT, unit=UNIT, value=VALUE)])
+      
+#keep this since its an integration test for later 
 def test_device_creation_with_jsonFile_Valid():
 
-        device = src.pipeline.Helper_Config.create_device_from_json2(FILE_PATH)
+        device = src.pipeline.Helper_Config.Create_Device_From_Json2(FILE_PATH)
         assert device is not None
         assert isinstance(device, Device)
 
@@ -40,4 +47,24 @@ def test_device_creation_with_values_Valid():
 
     device = Device(device_type=DEVICETYPE, device_id=DEVICEID, device_name=DEVICENAME,
                     timestamp=DAYTIME, status=STATUS, readings = [Reading(metric=MOVEMENT, unit=UNIT, value=VALUE)])
+
+    assert device is not None
+    assert isinstance(device, Device)
+    assert device.device_type == DEVICETYPE
+    assert device.device_id == DEVICEID
+    assert device.device_name == DEVICENAME
+    assert device.timestamp == DAYTIME
+    assert device.status == STATUS
+    assert device.readings[0].metric == MOVEMENT
+    assert device.readings[0].unit == UNIT
+    assert device.readings[0].value == VALUE
+
+
+def test_device_creation_with_values_Invalid(test_createDevice):
+   
+     test_createDevice.device_Type = INVALID_VALUE
+     with pytest.raises(pydantic.ValidationError):
+         test_createDevice
+        
+
 #endregion testCases
