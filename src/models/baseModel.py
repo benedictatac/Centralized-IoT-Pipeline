@@ -51,7 +51,3 @@ class Device(BaseModel):
 if __name__ ==  '__main__':
     
     device = Device(device_type = DeviceType.CAMERA, device_id=uuid4(), device_name="something",  timestamp=datetime.now(), readings = [Reading(metric = Metric.MOVEMENT, unit = Unit.CELSIUS, value= 2.0)])
-
-
-    if device != NULL:
-        print("We good chief")
