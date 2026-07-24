@@ -2,7 +2,7 @@
 ### MAIN TEST HELPER THAT INCLDES FUNCTIONS, ARBRITRARY VALUES AND CONST MEMBERS ### 
 
 from multiprocessing import Value
-from src.models.baseModel import BaseModel, Device, DeviceStatus, DeviceType, Metric, Unit, Reading
+from src.models.baseModel import BaseModel, Device, DeviceType, Metric, Unit, Reading
 from uuid import UUID, uuid4
 import enum
 import pydantic

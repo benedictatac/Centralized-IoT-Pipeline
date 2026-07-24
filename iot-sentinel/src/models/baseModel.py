@@ -19,17 +19,19 @@ class DeviceType(Enum):
 
 class Metric(Enum):
     MOVEMENT = "MOVEMENT"
+    STATE = "STATE"
     TEMPERATURE = "TEMPERATURE"
     VOLUME = "VOLUME"
 
 class Unit(Enum):
     KMPERHOUR = "KMPERHOUR"
+    BOOLEAN = "BOOLEAN"
     CELSIUS = "CELSIUS"
     DECIBEL = "DECIBEL"
 
-class DeviceStatus(Enum):
-    ACTIVE = "ACTIVE"
-    INACTIVE = "INACTIVE"
+# class DeviceStatus(Enum):
+#     ACTIVE = True
+#     INACTIVE = False
 
 class Reading(BaseModel):
     
@@ -43,13 +45,13 @@ class Device(BaseModel):
     device_id : UUID4
     device_name : str
     timestamp : datetime
-    status: DeviceStatus
+    # status: DeviceStatus
     readings : list[Reading] = Field(default_factory=list)
 
 
 if __name__ ==  '__main__':
     
-    device = Device(device_type = DeviceType.CAMERA, device_id=uuid4(), device_name="something",  timestamp=datetime.now(), status = DeviceStatus.ACTIVE, readings = [Reading(metric = Metric.MOVEMENT, unit = Unit.CELSIUS, value= 2.0)])
+    device = Device(device_type = DeviceType.CAMERA, device_id=uuid4(), device_name="something",  timestamp=datetime.now(), readings = [Reading(metric = Metric.MOVEMENT, unit = Unit.CELSIUS, value= 2.0)])
 
 
     if device != NULL:

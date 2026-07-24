@@ -1,0 +1,36 @@
+
+
+name: Tests
+
+
+#trigger
+on: 
+  push:
+    branches: ["main"]
+
+  pull_request:
+    branches: ["main"]
+
+#Environment - Os and python version
+jobs: 
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name : Set up Python python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version-file: 'pyproject.toml'
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run unit tests
+        run: |
+          pytest 
