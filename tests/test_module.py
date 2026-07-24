@@ -1,18 +1,15 @@
 from importlib import metadata
 from os import read
 import pathlib
-
-from click import File
-from sklearn import metrics
 from src.models.baseModel import BaseModel, Device, DeviceType, Metric, Reading, Unit
-import pydantic
-import pytest
 import uuid
 from datetime import datetime
 import src.pipeline.Helper_Config
 import json
 import docker.mosquitto.data
 from pathlib import Path
+import pytest
+import pydantic
 
 #region members
 
