@@ -1,23 +1,21 @@
 from queue import Empty
 from unicodedata import category
-from paho import mqtt
 from paho.mqtt import client as mqttclient
 import os
 import time
 import json
 from dotenv import load_dotenv
 from config import Settings
-
+import logging
 
 settings = Settings()
 
-CLIENT_TOPIC = os.getenv("TOPIC", settings.TOPIC_DEFAULT)
+CLIENT_TOPIC = settings.TOPIC_DEFAULT
 MQTT_PORT = os.getenv("MQTT_PORT", 1883)
 MQTT_HOST = os.getenv("MQTT_HOST", "localhost")
 PLACEHOLDER_CLIENT_ID = "Client-ID"
 
 #requires callback functions so we get a resulting output of whether we do connect to the broker and/or we get a message from it
-
 class Client:
 
 
@@ -25,10 +23,14 @@ class Client:
     def __init__(self, host:str, port:int, clientId:str):
         self.host = host
         self.port = port
+        self.clientId = clientId
+        self.client = None
 
+        #add subscription to topics inside on_connect right away 
     def on_connect(self, client, userdata, flags, reason_code, properties):
 
         if reason_code ==0:
+
             print("Successfully connected to broker")
             #subscribe to topic right away so on reconnect, it automatically subscribes
             self.SubscribeToTopic(client) 
@@ -36,33 +38,53 @@ class Client:
             print(f"Failed to connect, reason code: {reason_code}")
 
 
-    def on_message(client, userdata, msg):
-        print(f"Received message on topic:{msg.topic}")
-        print(f"Payload: {msg.payload.decode()}")
+    def on_message_topic(self, client, userdata, msg):
 
-        
+        if msg is None or getattr(msg, 'payload', None) is None:
+            return
+
+        data = None
+        try:
+            if msg.topic:
+                print(f"Received message on topic: {msg.topic}", flush = True)
+                data = self.parse_json_payload(msg = msg)
+            if data is not None:
+                print(f"Parsed data is {data}")
+
+        except Exception as e: 
+            print(f"Error processing message on topic '{getattr(msg, 'topic', 'unknown')}': {e}", flush=True)   
+    
+    def parse_json_payload(self, msg) -> dict | None:
+         try: 
+            parsed_json = msg.payload.decode("utf-8")
+            return json.loads(parsed_json)
+         except (UnicodeError, AttributeError) as e: 
+            logging.error(f"Failed to decode message on {msg.topic}: payload is not valid UTF-8 text.")
+            return None
+         except json.JSONDecodeError as err:
+            logging.error(f"JSON parsing error on topic '{msg.topic}': {err}")
+            logging.debug(f"Raw raw text was: {msg.payload}")
+            return None
 
 
-    def CreateAndConnectClient(self, host:str, port:int, clientId:str) -> mqttclient.Client:
 
-        self.client = mqttclient.Client(callback_api_version=mqttclient.CallbackAPIVersion.VERSION2, client_id=clientId)
+    def CreateAndConnectClient(self) -> mqttclient.Client:
+
+        self.client = mqttclient.Client(callback_api_version=mqttclient.CallbackAPIVersion.VERSION2, client_id=self.clientId)
         
         self.client.on_connect = self.on_connect
-        self.client.on_message = self.on_message
+        self.client.on_message = self.on_message_topic
 
+        self.client.connect(self.host, self.port)
         self.client.loop_start()
-        self.client.connect(host, port)
-        self.client.loop_forever()
-
         return self.client
 
     
     def SubscribeToTopic(self, mqtt_client:mqttclient.Client):
         
         try:
-
-            result, mid = mqtt_client.subscribe(CLIENT_TOPIC)
-            status = print(f"Successfully subscribed to {self.CLIENT_TOPIC}") if result ==0 else print("Could not subscribe to Topics")
+            result, mid = mqtt_client.subscribe(CLIENT_TOPIC) 
+            print(f"Successfully subscribed to {CLIENT_TOPIC}") if result ==0 else print("Could not subscribe to Topics")
         except Exception as e:
             print(f"Did not sucessfully subscribe to Topic due to {e}")
             mqtt_client.loop_stop()
@@ -71,10 +93,19 @@ class Client:
 
 if __name__ == '__main__':
 
+    print("Script started!")
 
     try:
         clientMqtt = Client(MQTT_HOST,MQTT_PORT,PLACEHOLDER_CLIENT_ID)   
-        clientMqtt.CreateAndConnectClient(MQTT_HOST,MQTT_PORT, PLACEHOLDER_CLIENT_ID)
+        clientMqtt.CreateAndConnectClient()
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("\nDisconnecting client...")
+        if clientMqtt.client:
+            clientMqtt.client.loop_stop()
+            clientMqtt.client.disconnect()
+        print("Script exited cleanly.")
     except Exception as e:
         print(f"Problem occured at {e}")
 
