@@ -7,7 +7,7 @@ services:
     #service 1: mqtt-broker
     mqtt-broker: 
         image: eclipse-mosquitto:2.1-alpine
-        container_name : ${MQTT_NAME}
+        # container_name : ${MQTT_HOST}
         ports:
             - "1883:1883"
         volumes: 
@@ -20,7 +20,7 @@ services:
     #service 2: redis cache memory
     redis: 
         image: redis:8.4.4-alpine
-        container_name: ${RDS_NAME}
+        # container_name: ${RDS_NAME}
         command: redis-server --appendonly yes
         volumes:
             - redisData:/data
@@ -31,7 +31,7 @@ services:
     #service #3: db PostgreSQL 
     db: 
         image: postgres:16.14-bookworm
-        container_name : postgres-db
+        # container_name : postgres-db
         environment: 
                 POSTGRES_USER : ${DB_USER}
                 POSTGRES_PASSWORD : ${DB_PASSWORD}

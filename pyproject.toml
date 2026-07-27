@@ -46,6 +46,7 @@ dev = [
     "pytest >= 9.1.1", 
     "ruff >= 0.15.21", 
     "mypy >= 2.3.0", 
+    "pydantic_settings >= 2.14.2"
 ]
 
 [tool.hatch.build.targets.wheel]

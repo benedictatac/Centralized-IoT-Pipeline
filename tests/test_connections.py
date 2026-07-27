@@ -18,7 +18,7 @@ data = {
     "captureType" : ["pictures", "videos"]
     }
 #variables for MQTT broker
-BROKER = os.getenv("MQTT_NAME", "localhost")
+BROKER = os.getenv("MQTT_HOST", "localhost")
 PORT = int(os.getenv("MQTT_PORT", 1883))
 CLIENT_ID = "client-Id"
 
