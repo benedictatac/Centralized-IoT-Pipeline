@@ -1,17 +1,15 @@
-from queue import Empty
-from unicodedata import category
 from paho.mqtt import client as mqttclient
 import os
 import time
 import json
-from dotenv import load_dotenv
 from config import Settings
 import logging
+from src.models.baseModel import Device 
 
 settings = Settings()
-
+device_obj = Device()
 CLIENT_TOPIC = settings.TOPIC_DEFAULT
-MQTT_PORT = os.getenv("MQTT_PORT", 1883)
+MQTT_PORT = int(os.getenv("MQTT_PORT", 1883))
 MQTT_HOST = os.getenv("MQTT_HOST", "localhost")
 PLACEHOLDER_CLIENT_ID = "Client-ID"
 
@@ -40,20 +38,23 @@ class Client:
 
     def on_message_topic(self, client, userdata, msg):
 
+        #case of msg being NONE | empty 
         if msg is None or getattr(msg, 'payload', None) is None:
             return
 
-        data = None
+        data = None # initialize to None so it won't have some garbage value 
         try:
             if msg.topic:
                 print(f"Received message on topic: {msg.topic}", flush = True)
                 data = self.parse_json_payload(msg = msg)
+                dataValidated = device_obj.validate_dict(data) 
             if data is not None:
                 print(f"Parsed data is {data}")
 
         except Exception as e: 
             print(f"Error processing message on topic '{getattr(msg, 'topic', 'unknown')}': {e}", flush=True)   
-    
+
+            #parsing to return dict structure 
     def parse_json_payload(self, msg) -> dict | None:
          try: 
             parsed_json = msg.payload.decode("utf-8")
@@ -89,7 +90,9 @@ class Client:
             print(f"Did not sucessfully subscribe to Topic due to {e}")
             mqtt_client.loop_stop()
             
-    
+        
+         
+
 
 if __name__ == '__main__':
 
@@ -98,6 +101,8 @@ if __name__ == '__main__':
     try:
         clientMqtt = Client(MQTT_HOST,MQTT_PORT,PLACEHOLDER_CLIENT_ID)   
         clientMqtt.CreateAndConnectClient()
+
+
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
