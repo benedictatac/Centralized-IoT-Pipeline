@@ -34,7 +34,7 @@ class Unit(Enum):
 
 class Reading(BaseModel):
     
-    metric: Metric | str
+    metric: Metric
     unit : Unit
     value : float
 

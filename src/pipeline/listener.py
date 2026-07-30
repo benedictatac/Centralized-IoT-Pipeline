@@ -8,6 +8,7 @@ from config import Settings
 import logging
 from src.models.baseModel import Device 
 
+#connection and message receiving -> sends to processor 
 settings = Settings()
 device_obj = Device()
 CLIENT_TOPIC = settings.TOPIC_DEFAULT
