@@ -28,9 +28,6 @@ class Unit(Enum):
     CELSIUS = "CELSIUS"
     DECIBEL = "DECIBEL"
 
-# class DeviceStatus(Enum):
-#     ACTIVE = True
-#     INACTIVE = False
 
 class Reading(BaseModel):
     
@@ -45,7 +42,3 @@ class Device(BaseModel):
     device_name : str
     timestamp : datetime
     readings : list[Reading] = Field(default_factory=list)
-
-    @classmethod
-    def validate_dict(cls, data:dict) -> "Device":
-        return cls.model_validate(data)

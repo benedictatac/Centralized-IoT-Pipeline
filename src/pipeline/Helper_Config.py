@@ -8,7 +8,18 @@ import enum
 import pydantic
 import json
 from pathlib import Path
+from config import Settings as settings
 #trying out 3 different types of testing in this case, for personal and learning reasons
+
+
+
+#region env variables from settings
+
+CLIENT_TOPIC = settings.TOPIC_DEFAULT
+MQTT_PORT = settings.MQTT_PORT
+MQTT_HOST = settings.MQTT_HOST
+PLACEHOLDER_CLIENT_ID = "Client-ID"
+#endregion
 
 
 #specific method with hardcoded values from dev user's 
