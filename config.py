@@ -1,6 +1,8 @@
 from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from src.pipeline.listener import MQTT_HOST, MQTT_PORT
+
 
 class Settings(BaseSettings):
 
@@ -9,16 +11,16 @@ class Settings(BaseSettings):
     TOPIC_DEFAULT : str = "home/#"
 
     #region BaseSettings for DB
-    # db_port = int = 5433
+    DB_PORT = int = 5433
     #endregion
 
     #region BaseSettings for Mqtt
-    # mqtt_host = str = "localhost"
-    # mqtt_port = int = 1883
+    MQTT_HOST= str = "localhost"
+    MQTT_PORT= int = 1883
 
     #endregion
 
     #region BaseSettings for Redis
-    # redis_port = int = 6739
+    RDS_PORT= int = 6739
     #endregion
 

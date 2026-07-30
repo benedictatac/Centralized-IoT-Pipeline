@@ -2,6 +2,8 @@ from paho.mqtt import client as mqttclient
 import os
 import time
 import json
+
+from pydantic import ValidationError
 from config import Settings
 import logging
 from src.models.baseModel import Device 
@@ -9,8 +11,8 @@ from src.models.baseModel import Device
 settings = Settings()
 device_obj = Device()
 CLIENT_TOPIC = settings.TOPIC_DEFAULT
-MQTT_PORT = int(os.getenv("MQTT_PORT", 1883))
-MQTT_HOST = os.getenv("MQTT_HOST", "localhost")
+MQTT_PORT = settings.MQTT_PORT
+MQTT_HOST = settings.MQTT_HOST
 PLACEHOLDER_CLIENT_ID = "Client-ID"
 
 #requires callback functions so we get a resulting output of whether we do connect to the broker and/or we get a message from it
@@ -47,10 +49,13 @@ class Client:
             if msg.topic:
                 print(f"Received message on topic: {msg.topic}", flush = True)
                 data = self.parse_json_payload(msg = msg)
-                dataValidated = device_obj.validate_dict(data) 
             if data is not None:
                 print(f"Parsed data is {data}")
+            dataValidated = device_obj.validate_dict(data) 
 
+        except ValidationError as e: 
+            print(f"Validation failed. Schema does not correspond")
+            print(e.errors())
         except Exception as e: 
             print(f"Error processing message on topic '{getattr(msg, 'topic', 'unknown')}': {e}", flush=True)   
 
