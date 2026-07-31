@@ -9,7 +9,7 @@ class Base(DeclarativeBase):
     pass
 
 
-class Device(Base):
+class DeviceDB(Base):
     __tablename__ = "devices"
 
     device_id: Mapped[uuid.UUID] = mapped_column(
@@ -51,4 +51,4 @@ class Reading(Base):
     )
 
     # Many-to-One Relationship back to Device
-    device: Mapped["Device"] = relationship(back_populates="readings")
+    device: Mapped["DeviceDB"] = relationship(back_populates="readings")

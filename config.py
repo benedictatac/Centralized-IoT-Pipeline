@@ -1,26 +1,35 @@
+from typing import ClassVar
 from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
-from src.pipeline.listener import MQTT_HOST, MQTT_PORT
 
 
 class Settings(BaseSettings):
 
+    model_config = SettingsConfigDict(
+        env_file=".env", env_file_encoding="utf-8", extra ="ignore",)
+
     #get default values so, will later integrate a different way of keeping .env variables a secret using GitHub Actions Secrets 
     
-    TOPIC_DEFAULT : str = "home/#"
+    topic_default : str = "home/#"
 
     #region BaseSettings for DB
-    DB_PORT = int = 5433
+    db_port: int = 5433
+    db_user: str
+    db_password: str
+    db_name: str
+    db_host : str = "localhost"
     #endregion
 
     #region BaseSettings for Mqtt
-    MQTT_HOST= str = "localhost"
-    MQTT_PORT= int = 1883
-
+    mqtt_host: str = "localhost"
+    mqtt_port: int = 1883
     #endregion
 
     #region BaseSettings for Redis
-    RDS_PORT= int = 6739
+    rds_port:int = 6739
+    rds_user : str	
+    rds_password : str
+    rds_name : str
+    rds_host : str = "localhost"
     #endregion
 

@@ -32,5 +32,12 @@ jobs:
           pip install -e ".[dev]"
 
       - name: Run unit tests
+        env: 
+            DB_USER: ${{secrets.DB_USER}}
+            DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+            DB_NAME: ${{secrets.DB_NAME}}
+            RDS_USER: ${{secrets.RDS_USER}}
+            RDS_PASSWORD: ${{secrets.RDS_PASSWORD}}
+            RDS_NAME: ${{secrets.RDS_NAME}}
         run: |
           pytest 
