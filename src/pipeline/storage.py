@@ -38,42 +38,38 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         yield session
 
 
-async def upsert_device(device_type:str, device_name:str, session:AsyncSession,device_id: uuid.UUID) -> DeviceDB:
+async def upsert_device(device:Device, session:AsyncSession) -> DeviceDB:
 
     #1. Check if device is avaialable
-
-   
-        stmt = select(DeviceDB).where(DeviceDB.device_id == device_id)
+        stmt = select(DeviceDB).where(DeviceDB.device_id == device.device_id)
         result = await session.execute(stmt)
 
-        device = result.scalar_one_or_none()
+        device_found = result.scalar_one_or_none()
         now = datetime.now(timezone.utc)
         #if device does not exist, we create a new one
-        if not device: 
-            new_device = DeviceDB(device_id = device_id, device_type = device_type, device_name = device_name)
+        if not device_found: 
+            new_device = DeviceDB(device_id = device.device_id, device_type = device.device_type, device_name = device.device_name)
             session.add(new_device)
             return new_device
         
             #else we update_at of the device accordingly
         else:
-            device.updated_at = now
-            return device
+            device_found.updated_at = now
+            return device_found
 
 
 
 
-async def insert_readings(device_id: uuid.UUID, 
-                                             session : AsyncSession, 
-                                             readings_data : List[Reading], timestamp:datetime ) -> None:
-        if not readings_data:
+async def insert_readings(device:Device, session:AsyncSession) -> None:
+        if not device.readings:
             return
-        for reading in readings_data:
+        for reading in device.readings:
             new_reading = ReadingDB(
-            device_id=device_id,
+            device_id=device.device_id,
             metric=reading.metric,
             unit=reading.unit,
             value=reading.value,
-            timestamp=timestamp
+            timestamp=device.timestamp
         )
             session.add(new_reading)
 
@@ -83,17 +79,10 @@ async def store_event(device: Device, session:AsyncSession):
     
     
     try: 
-        device_row = await upsert_device(
-        device_id=device.device_id,
-        device_type=device.device_type,
-        device_name=device.device_name,
-        session=session
-    )
-
-        await insert_readings(device_id=device.device_id,
-                            readings_data=device.readings,    
-                           timestamp=device.timestamp, session = session,)
+        device_row = await upsert_device(device=device, session =session)
+        await insert_readings(device, session =session)
         await session.commit()
 
     except Exception:
         await session.rollback()
+        raise
