@@ -34,7 +34,8 @@ dependencies = [
     "pydantic >= 2.13.4", 
     "alembic >= 1.18.5", 
     "asyncpg >= 0.31.0",
-    "psycopg2-binary >= 2.9.12"
+    "psycopg2-binary >= 2.9.12", 
+    
 ]
 license = "MIT"
 
