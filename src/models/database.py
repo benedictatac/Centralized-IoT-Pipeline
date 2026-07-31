@@ -15,7 +15,7 @@ class DeviceDB(Base):
     device_id: Mapped[uuid.UUID] = mapped_column(
         primary_key=True, default=uuid.uuid4, server_default=text('gen_random_uuid()')
     )
-    device_name: Mapped[str] = mapped_column(String, nullable=False)
+    device_name: Mapped[str] = mapped_column(String, nullable= True)
     device_type: Mapped[str] = mapped_column(String, nullable=False)
     
     # Defaults handled both in-app and at database level via server_default
@@ -27,12 +27,12 @@ class DeviceDB(Base):
     )
 
     # One-to-Many Relationship to Readings
-    readings: Mapped[list["Reading"]] = relationship(
+    readings: Mapped[list["ReadingDB"]] = relationship(
         back_populates="device", cascade="all, delete-orphan" # want all data deleted on it if device is deleted
     )
 
 
-class Reading(Base):
+class ReadingDB(Base):
     __tablename__ = "readings"
 
     id: Mapped[uuid.UUID] = mapped_column(

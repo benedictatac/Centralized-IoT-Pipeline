@@ -12,8 +12,6 @@ import json
 
 
 
-
-
 def process_message(msg) -> Device:
 
         #case of msg being NONE | empty 
