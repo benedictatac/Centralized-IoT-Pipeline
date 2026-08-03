@@ -45,7 +45,6 @@ def connect_mqtt():
     )
    client.on_message= on_message
    
-
    try: 
        result = client.connect(BROKER, PORT, keepalive=60)
        if result == 0:

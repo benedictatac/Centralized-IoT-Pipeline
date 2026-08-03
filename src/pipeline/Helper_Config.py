@@ -14,9 +14,6 @@ from config import Settings
 
 
 #region env variables from settings
-settings = Settings()
-MQTT_PORT = settings.mqtt_port
-MQTT_HOST = settings.mqtt_host
 PLACEHOLDER_CLIENT_ID = "Client-ID"
 #endregion
 

@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     #endregion
 
     #region BaseSettings for Redis
-    rds_port:int = 6739
+    rds_port:int = 6379
     rds_user : str	
     rds_password : str
     rds_name : str
