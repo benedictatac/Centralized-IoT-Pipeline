@@ -10,23 +10,23 @@ from enum import Enum
 
 
 class DeviceType(Enum):
-    CAMERA = "CAMERA"
-    LIGHTBULB = "LIGHTBULB"
-    THERMOSTAT = "THERMOSTAT"
-    SPEAKER = "SPEAKER"
+    CAMERA = "Camera"
+    LIGHTBULB = "LightBulb"
+    THERMOSTAT = "Thermostat"
+    SPEAKER = "Speaker"
 
 
 class Metric(Enum):
-    MOVEMENT = "MOVEMENT"
-    STATE = "STATE"
-    TEMPERATURE = "TEMPERATURE"
-    VOLUME = "VOLUME"
+    MOVEMENT = "Movement"
+    STATE = "State"
+    TEMPERATURE = "Temperature"
+    VOLUME = "Volume"
 
 class Unit(Enum):
-    KMPERHOUR = "KMPERHOUR"
-    BOOLEAN = "BOOLEAN"
-    CELSIUS = "CELSIUS"
-    DECIBEL = "DECIBEL"
+    KMPERHOUR = "kmPerHour"
+    BOOLEAN = "Boolean"
+    CELSIUS = "Celsius"
+    DECIBEL = "Decibel"
 
 
 class Reading(BaseModel):

@@ -23,25 +23,23 @@ async def root():
     return{"Message": "Hello World"}
 
 #response_model initiates automatic validaiton and field filtering 
-@app.get("/events", response_model = list[ReadingResponse])
-async def get_readings(device_id :uuid.UUID | None = None, limit: int =10, db: AsyncSession = Depends(get_db)):
-
-
-    #whatever value we get here is in Reading We want to go from 
-    # SQLAlchemy -> Pydantic -> Json String (serialized for http response to client)
-    if device_id is not None:
-        query_readings = (
+#specific get endpoint for a device
+@app.get("/events/{device_id}", response_model=list[ReadingResponse])
+async def get_readings_for_device(device_id: uuid.UUID, limit: int = 10, db: AsyncSession = Depends(get_db)):
+    query_readings = (
         select(ReadingDB)
         .where(ReadingDB.device_id == device_id)
-        .order_by(ReadingDB.timestamp.desc()).limit(limit)
+        .order_by(ReadingDB.timestamp.desc())
+        .limit(limit)
     )
-    else:
-        query_readings = (
-            select(ReadingDB)
-            .order_by(Reading.DB.timestamp.desc()).limit(limit)
-            
-            
-            )
+    readings = await db.scalars(query_readings)
+    return readings.all()
+
+@app.get("/events", response_model = list[ReadingResponse])
+
+async def get_all_readings(limit: int = 50, db:AsyncSession = Depends(get_db)):
+
+    query_readings = select(ReadingDB).order_by(ReadingDB.timestamp.desc()).limit(limit)
 
     readings = await db.scalars(query_readings)
     return readings.all()
