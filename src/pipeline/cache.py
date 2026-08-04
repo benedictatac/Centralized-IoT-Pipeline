@@ -22,6 +22,6 @@ async def upsert_data(device:Device):
     #then convert pydantic model into standard python dict
     #basically Pydantic -> python obj -> string var 
     value = json.dumps([reading.model_dump() for reading in device.readings])
-
+     
     await conn.set(key,value)
     await conn.expire(key, 86400)

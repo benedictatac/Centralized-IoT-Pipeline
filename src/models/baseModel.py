@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from multiprocessing import Value
 from uuid import uuid4
 from xmlrpc.client import boolean
-from pydantic import UUID4, BaseModel, Field 
+from pydantic import UUID4, BaseModel, ConfigDict, Field 
 import string
 from datetime import datetime
 from enum import Enum
@@ -42,3 +42,12 @@ class Device(BaseModel):
     device_name : str
     timestamp : datetime
     readings : list[Reading] = Field(default_factory=list)
+
+class ReadingResponse(BaseModel):
+    id: UUID4
+    device_id: UUID4
+    metric:str
+    unit:str
+    value:float
+    timestamp:datetime
+    model_config = ConfigDict(from_attributes=True)
