@@ -10,11 +10,9 @@ import docker.mosquitto.data
 from pathlib import Path
 import pytest
 import pydantic
-
+from conftest import FILE_PATH, test_createDevice
 #region members
 
-BASE_DIR = Path(__file__).parent.parent
-FILE_PATH = BASE_DIR / "docker" / "mosquitto" / "data" / "randomData.json"
 DEVICETYPE = DeviceType.CAMERA
 DEVICEID = uuid.uuid4()
 DEVICENAME = "Charles' device"
@@ -24,15 +22,10 @@ MOVEMENT = Metric.MOVEMENT
 UNIT = Unit.CELSIUS
 VALUE = 2.0
 INVALID_VALUE = "BANANA"
+
 #endregion
 
 #region testCases
-
-@pytest.fixture
-def test_createDevice():
-       return  Device(device_type=DEVICETYPE, device_id=DEVICEID, device_name=DEVICENAME,
-                    timestamp=DAYTIME, readings = [Reading(metric=MOVEMENT, unit=UNIT, value=VALUE)])
-      
 #keep this since its an integration test for later 
 def test_device_creation_with_jsonFile_valid():
 
@@ -40,10 +33,9 @@ def test_device_creation_with_jsonFile_valid():
         assert device is not None
         assert isinstance(device, Device)
 
-def test_create_valid_device():
+def test_create_valid_device(test_create_device):
 
-    device = Device(device_type=DEVICETYPE, device_id=DEVICEID, device_name=DEVICENAME,
-                    timestamp=DAYTIME, readings = [Reading(metric=MOVEMENT, unit=UNIT, value=VALUE)])
+    device = test_createDevice
 
     assert device is not None
     assert isinstance(device, Device)
@@ -56,7 +48,7 @@ def test_create_valid_device():
     assert device.readings[0].value == VALUE
 
 
-def test_invalid_devicetype(test_createDevice):
+def test_invalid_devicetype(test_create_device):
    
      bad_device = test_createDevice.model_dump()
 
@@ -64,28 +56,28 @@ def test_invalid_devicetype(test_createDevice):
      with pytest.raises(pydantic.ValidationError):
          Device.model_validate(bad_device)
 
-def test_invalid_deviceID(test_createDevice):
+def test_invalid_deviceID(test_create_device):
     bad_device = test_createDevice.model_dump()
     bad_device["device_id"] = INVALID_VALUE
 
     with pytest.raises(pydantic.ValidationError):
         Device.model_validate(bad_device)
 
-def test_invalid_deviceName(test_createDevice):
+def test_invalid_deviceName(test_create_device):
     bad_device = test_createDevice.model_dump()
     bad_device["device_name"] = 123
 
     with pytest.raises(pydantic.ValidationError):
         Device.model_validate(bad_device)
 
-def test_invalid_timeStamp(test_createDevice):
+def test_invalid_timeStamp(test_create_device):
     bad_device = test_createDevice.model_dump()
     bad_device["timestamp"] = "somethingdifferent here"
 
     with pytest.raises(pydantic.ValidationError):
         Device.model_validate(bad_device)
 
-def test_invalid_readingmetric(test_createDevice):
+def test_invalid_readingmetric(test_create_device):
 
     bad_device = test_createDevice.model_dump()
     bad_device["readings"][0]["metric"] = INVALID_VALUE
@@ -93,14 +85,14 @@ def test_invalid_readingmetric(test_createDevice):
     with pytest.raises(pydantic.ValidationError):
         Device.model_validate(bad_device)
 
-def test_invalid_readingunit(test_createDevice):
+def test_invalid_readingunit(test_create_device):
 
     bad_device = test_createDevice.model_dump()
     bad_device["readings"][0]["value"] = INVALID_VALUE
     with pytest.raises(pydantic.ValidationError):
         Device.model_validate(bad_device)
 
-def test_invalid_readingvalue(test_createDevice):
+def test_invalid_readingvalue(test_create_device):
 
     bad_device = test_createDevice.model_dump()
     bad_device["readings"][0]["value"] = INVALID_VALUE

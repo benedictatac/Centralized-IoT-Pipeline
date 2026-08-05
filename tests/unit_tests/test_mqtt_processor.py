@@ -4,7 +4,7 @@ import pytest
 import json
 import uuid
 from datetime import datetime
-
+from tests.unit_tests.conftest import valid_payload
 
 class FakeMqttMsg:
     def __init__(self, topic, payload):
@@ -15,19 +15,6 @@ class FakeMqttMsg:
 def make_msg(data: dict) -> FakeMqttMsg:
     payload = json.dumps(data).encode("utf-8")
     return FakeMqttMsg(topic="test/topic", payload=payload)
-
-
-@pytest.fixture
-def valid_payload():
-    return {
-        "device_id": str(uuid.uuid4()),
-        "device_name": "Test Thermostat",
-        "device_type": "Thermostat",
-        "timestamp": datetime.now().isoformat(),
-        "readings": [
-            {"metric": "Temperature", "unit": "Celsius", "value": 22.5}
-        ]
-    }
 
 
 def test_valid_json_payload(valid_payload):
