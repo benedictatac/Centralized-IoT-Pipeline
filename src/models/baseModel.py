@@ -1,3 +1,6 @@
+
+#file organises the pydantic model thats going to be the main structure of the data 
+
 from dataclasses import dataclass
 from multiprocessing import Value
 from uuid import uuid4

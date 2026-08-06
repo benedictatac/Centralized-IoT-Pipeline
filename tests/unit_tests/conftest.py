@@ -49,15 +49,12 @@ def valid_payload():
     }
 
 @pytest.fixture
-def test_created_device():
+def create_device_obj():
        
     
         device = Device(device_type=DeviceType.CAMERA, device_id=uuid.uuid4(), device_name="Charles' device",
-                    timestamp=datetime.now(), readings = [Reading(metric=Metric.MOVEMENT, unit=Unit.Celsius, value=2.0)])
-        
+                    timestamp=datetime.now(), readings = [Reading(metric=Metric.MOVEMENT, unit=Unit.CELSIUS, value=2.0)])
         yield device 
-
-        
         device.delete()
 
 
@@ -100,7 +97,7 @@ async def mock_client():
 
 
 
-@pytest.fixture(session = "session")
+@pytest.fixture(scope = "session")
 async def mock_engine():
 
     engine = create_engine(url = TEST_DATABASE_URL)

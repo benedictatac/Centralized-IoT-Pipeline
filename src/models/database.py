@@ -1,6 +1,10 @@
+
+#the structure before creating the database required elements.
+#this will say what we will declare in the database (what type of data in sqlalchemy orm)
+# database metadata that describes real sql tables that exist, or will exist - https://docs.sqlalchemy.org/en/20/orm/quickstart.html
+
 from datetime import datetime
 import uuid
-
 from sqlalchemy import ForeignKey, String, Float, DateTime, func, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 

@@ -17,7 +17,7 @@ os.environ.setdefault("RDS_NAME", "mock")
 
 from src.api.endpoints import app
 from src.pipeline.storage import get_db, ReadingDB
-from conftest import mock_client
+from tests.unit_tests.conftest import mock_client
 
 
 
