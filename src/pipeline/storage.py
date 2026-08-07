@@ -73,7 +73,6 @@ async def insert_readings(device:Device, session:AsyncSession) -> None:
         )
             session.add(new_reading)
 
- 
 
 async def store_event(device: Device, session:AsyncSession):
     

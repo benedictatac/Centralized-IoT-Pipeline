@@ -23,7 +23,12 @@ night_temps = np.random.uniform(17.0, 20.0, 200)
 X_night = np.column_stack((night_hours, night_temps))
 
 # --- 3. Combined Feature Matrix X ---
-X = np.vstack((X_day, X_night))
+
+new_X_night  = np.round(X_night, 2)
+new_X_day = np.round(X_day, 2)
+
+
+X = np.vstack((new_X_day, new_X_night))
 
 # Shuffle to break block ordering
 np.random.shuffle(X)
