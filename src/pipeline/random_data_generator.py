@@ -1,40 +1,76 @@
 # -*- coding: utf-8 -*-
+from array import ArrayType
 import numpy as np
 
-# Set seed for reproducible data generation
-np.random.seed(42)
-
-# --- 1. Day Readings (200 samples) ---
-# Hours: 8 to 22 | Temp: 20 to 24 C
-day_hours = np.random.uniform(8.0, 22.0, 200)
-day_temps = np.random.uniform(20.0, 24.0, 200)
-X_day = np.column_stack((day_hours, day_temps))
-
-# --- 2. Night Readings (200 samples) ---
-# Hours: 22 to 24 OR 0 to 8 | Temp: 17 to 20 C
-# Pick 200 binary choices (0 for late night 22-24, 1 for early morning 0-8)
-night_mask = np.random.choice([0, 1], size=200)
-night_hours = np.where(
-    night_mask == 0,
-    np.random.uniform(22.0, 24.0, 200),  # 22:00 - 24:00
-    np.random.uniform(0.0, 8.0, 200)     # 00:00 - 08:00
-)
-night_temps = np.random.uniform(17.0, 20.0, 200)
-X_night = np.column_stack((night_hours, night_temps))
-
-# --- 3. Combined Feature Matrix X ---
-
-new_X_night  = np.round(X_night, 2)
-new_X_day = np.round(X_day, 2)
 
 
-X = np.vstack((new_X_day, new_X_night))
 
-# Shuffle to break block ordering
-np.random.shuffle(X)
+def random_data_generator() -> ArrayType:
 
-# Column 0: Time of Day (Float hours, e.g., 14.5 = 2:30 PM)
-# Column 1: Temperature Value (C)
-print(f"X shape: {X.shape}")
-print("First 5 samples [Hour, Temp]:")
-print(X[:5])
+    # Set seed for reproducible data generation
+    np.random.seed(42)
+
+    # --- 1. Day Readings (200 samples) ---
+    # Hours: 8 to 22 | Temp: 20 to 24 C
+    day_hours = np.random.uniform(8.0, 22.0, 150)
+    # day_temps = np.random.uniform(20.0, 24.0, 150)
+    day_hours_outliers = np.random.uniform(8.0, 22.0, 50)
+    # day_temps_outliers = np.random.uniform(50, 100, 50)
+    
+    day_hours_overall = np.column_stack((day_hours, day_hours_outliers))
+
+    day_mask = np.random.choice([0,1], size = 200)
+    day_temperature = np.where(
+        day_mask == 0, 
+        np.random.uniform(20.0, 24.0, 200),
+        np.random.uniform(50, 100, 50)
+        )
+    
+    X_day = np.column_stack((day_hours_overall, day_temperature))
+
+    
+
+
+    # --- 2. Night Readings (200 samples) ---
+    # Hours: 22 to 24 OR 0 to 8 | Temp: 17 to 20 C
+    # Pick 200 binary choices (0 for late night 22-24, 1 for early morning 0-8)
+    night_mask = np.random.choice([0, 1], size=200)
+    night_hours = np.where(
+        night_mask == 0,
+        np.random.uniform(22.0, 24.0, 200),  # 22:00 - 24:00
+        np.random.uniform(0.0, 8.0, 200)     # 00:00 - 08:00
+    )
+
+
+
+    night_temps = np.random.uniform(17.0, 20.0, 200)
+    X_night = np.column_stack((night_hours, night_temps))
+
+    # --- 3. Combined Feature Matrix X ---
+
+    new_X_night  = np.round(X_night, 2)
+    new_X_day = np.round(X_day, 2)
+
+   
+    X = np.vstack((new_X_day, new_X_night))
+
+    # Shuffle to break block ordering
+    np.random.shuffle(X)   
+  
+
+    return X
+
+
+
+if __name__ == '__main__':
+
+
+    
+
+    # Column 0: Time of Day (Float hours, e.g., 14.5 = 2:30 PM)
+    # Column 1: Temperature Value (C)
+
+    X = random_data_generator()
+    print(f"X shape: {X.shape}")
+    print("First 5 samples [Hour, Temp]:")
+    print(X[:5])
