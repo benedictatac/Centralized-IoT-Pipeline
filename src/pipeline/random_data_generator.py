@@ -17,15 +17,15 @@ def random_data_generator() -> ArrayType:
     day_hours_outliers = np.random.uniform(8.0, 22.0, 50)
     # day_temps_outliers = np.random.uniform(50, 100, 50)
     
-    day_hours_overall = np.column_stack((day_hours, day_hours_outliers))
+    day_hours_overall = np.concatenate((day_hours, day_hours_outliers))
 
-    day_mask = np.random.choice([0,1], size = 200)
+    day_mask = np.random.choice([0, 1], size=200, p=[0.9, 0.1])
     day_temperature = np.where(
         day_mask == 0, 
         np.random.uniform(20.0, 24.0, 200),
-        np.random.uniform(50, 100, 50)
+        np.random.uniform(50, 100, 200)
         )
-    
+        
     X_day = np.column_stack((day_hours_overall, day_temperature))
 
     
@@ -72,5 +72,5 @@ if __name__ == '__main__':
 
     X = random_data_generator()
     print(f"X shape: {X.shape}")
-    print("First 5 samples [Hour, Temp]:")
-    print(X[:5])
+    print("First 20 samples [Hour, Temp]:")
+    print(X[:20])
