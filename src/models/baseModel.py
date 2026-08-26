@@ -46,6 +46,12 @@ class Device(BaseModel):
     timestamp : datetime
     readings : list[Reading] = Field(default_factory=list)
 
+class AlertReading(BaseModel):
+    id : UUID4
+    device_id: UUID4 # from which device it comes form
+    reading : Reading # what readings it gave (showcases the specific anomaly value )
+
+
 class ReadingResponse(BaseModel):
     id: UUID4
     device_id: UUID4
@@ -53,4 +59,9 @@ class ReadingResponse(BaseModel):
     unit:str
     value:float
     timestamp:datetime
+    alerts: list[AlertReading] = Field(default_factory = list, nullable = True) # if no alerts, can be value
     model_config = ConfigDict(from_attributes=True)
+
+
+
+    

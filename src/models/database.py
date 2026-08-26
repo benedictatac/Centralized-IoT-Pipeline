@@ -56,3 +56,18 @@ class ReadingDB(Base):
 
     # Many-to-One Relationship back to Device
     device: Mapped["DeviceDB"] = relationship(back_populates="readings")
+
+
+class AlertDB(Base):
+    __tablename__ = 'alerts'
+
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        primary_key = True, default = uuid.uuid4, server_default = text('gen_random_uuid()')
+        )
+
+    device_id = Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("devices.device_id"), nullable =False
+        )
+
+    device: Mapped["DeviceDB"] = relationship(back_populates = 'alerts')
