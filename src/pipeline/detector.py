@@ -1,33 +1,44 @@
 import numpy as np
 from sklearn.ensemble import IsolationForest
-
 from src.pipeline.random_data_generator import random_data_generator
 
 
 class Detector:
 
-    def __init__(self, contamination: float = 0.1, random_state: int = 42):
+    def __init__(self, contamination: float = 0.1, random_state: int = 42): #setting contamination rate to 10% based on data numbers
         self.model = IsolationForest(contamination=contamination, random_state=random_state)
         self.is_trained = False
 
-    def train(self, X: np.ndarray = None) -> None:
-        if X is None:
-            X = random_data_generator()
-        self.model.fit(X)
-        self.is_trained = True
+    def train(self, X: np.ndarray = None) -> None: #train the input array taken from the random data generator 
+        if X is None: # array in this case is empty
+            X = random_data_generator() # we populate it 
+        self.model.fit(X)   #if it is not empty, we fit
+                            # fit in this case does not modify the data, used only for training data
+        self.is_trained = True   # this would mean it is then trained 
 
-    def score(self, readings) -> np.ndarray:
+
+    #we give the readings a score
+    def score(self, readings) -> np.ndarray: #outputs an np array
         if not self.is_trained:
             raise RuntimeError("Detector must be trained before scoring readings.")
 
-        readings = np.asarray(readings)
-        if readings.ndim == 1:
-            readings = readings.reshape(1, -1)
+        readings = np.asarray(readings) 
+        if readings.ndim == 1: #if the array is 1 dimensional, we 
+            readings = readings.reshape(1, -1) # convert into a 2D matrix with 1 row and automatically calculated columns 
+
+        ##
+        #after using reshape
+        #calculates the amount of columns in that 1D turning it into 2D
+        #readings = readings.reshape(1, -1)
+        # print(readings)        # Output: [[21.5, 22.0, 21.8, 22.3, 21.9]]
+        # print(readings.shape)  # Output: (1, 5)
+        # print(readings.ndim)   # Output: 2
+        ##
 
         # score_samples: higher = more normal, so negate for an anomaly score
         # where higher means more anomalous.
         return -self.model.score_samples(readings)
-
+        
     def predict(self, readings) -> np.ndarray:
         if not self.is_trained:
             raise RuntimeError("Detector must be trained before predicting readings.")

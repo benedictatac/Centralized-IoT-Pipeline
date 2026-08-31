@@ -17,7 +17,7 @@ def random_data_generator() -> ArrayType:
     day_hours_outliers = np.random.uniform(8.0, 22.0, 50)
     # day_temps_outliers = np.random.uniform(50, 100, 50)
     
-    day_hours_overall = np.concatenate((day_hours, day_hours_outliers))
+    day_hours_overall = np.concatenate((day_hours, day_hours_outliers)) #concatenated 150 +50 where 50 are the outliers
 
     day_mask = np.random.choice([0, 1], size=200, p=[0.9, 0.1])
     day_temperature = np.where(
