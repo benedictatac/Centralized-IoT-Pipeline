@@ -21,7 +21,7 @@ services:
     redis: 
         image: redis:8.4.4-alpine
         # container_name: ${RDS_NAME}
-        command: redis-server --appendonly yes
+        command: redis-server --appendonly yes --requirepass ${RDS_PASSWORD}
         volumes:
             - redisData:/data
         ports: 

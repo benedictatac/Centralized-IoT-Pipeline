@@ -22,7 +22,6 @@ def create_dashboard(X: np.ndarray, scores: np.ndarray, labels: np.ndarray) -> N
     total_len = len(X)
     anomaly_count = int(np.sum(labels == -1)) #total anomaly count
     normal_count = int(np.sum(labels == 1))
-    score_total = np.hstack()
 
     print("DashBoard for data inspection")
     print("*"*50)
@@ -31,7 +30,7 @@ def create_dashboard(X: np.ndarray, scores: np.ndarray, labels: np.ndarray) -> N
     print(f"Total number of normal      : {normal_count}")
     print(f"Hour Range                  : {X[:,0].min():.2f} - {X[:,0].max():.2f}") # we want all rows for only the first column this basically will have the hours from morning to night
     print(f"Temperature Range           : {X[:,1].min():.2f} - {X[:,1].max():.2f}")
-    print(f"Score Range                 : {[1,].min():.2f} - {scores[1,].max():.2f}")
+    print(f"Score Range                 : {scores.min():.2f} - {scores.max():.2f}") # scores is 1D, one score per sample
 def main(sample_size =50) -> None:
     X = random_data_generator()
 
@@ -39,9 +38,9 @@ def main(sample_size =50) -> None:
     detector.train(X)
 
     sample_we_want = X[:sample_size]
-    scores = detector.train(X)
+    scores = detector.score(sample_we_want) # train() returns None, score() returns the anomaly scores
     labels = detector.predict(sample_we_want)
-    create_dashboard(X, scores, labels)
+    create_dashboard(sample_we_want, scores, labels) # same rows the scores/labels were computed on
 
 
 if __name__ == '__main__':

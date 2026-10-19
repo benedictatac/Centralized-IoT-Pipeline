@@ -1,14 +1,9 @@
 
 ### MAIN TEST HELPER THAT INCLDES FUNCTIONS, ARBRITRARY VALUES AND CONST MEMBERS ### 
 
-from multiprocessing import Value
-from src.models.baseModel import BaseModel, Device, DeviceType, Metric, Unit, Reading
-from uuid import UUID, uuid4
-import enum
-import pydantic
+from src.models.baseModel import Device, Reading
 import json
 from pathlib import Path
-from config import Settings
 #trying out 3 different types of testing in this case, for personal and learning reasons
 
 
@@ -21,7 +16,8 @@ PLACEHOLDER_CLIENT_ID = "Client-ID"
 #specific method with hardcoded values from dev user's 
 def CreateValidDevice(deviceType,deviceUUID, deviceName, date, readings: list[Reading]) -> Device:
     
-        device = Device(device_type = deviceType, device_uuid = deviceUUID, device_name = deviceName, timestamp=date, readings =readings)
+        #field is device_id: pydantic silently ignored device_uuid and then failed with "device_id Field required"
+        device = Device(device_type = deviceType, device_id = deviceUUID, device_name = deviceName, timestamp=date, readings =readings)
         return device
 
 

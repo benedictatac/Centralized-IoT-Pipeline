@@ -17,22 +17,27 @@ class DeviceDB(Base):
     __tablename__ = "devices"
 
     device_id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, default=uuid.uuid4, server_default=text('gen_random_uuid()')
+        primary_key=True, default=uuid.uuid4, server_default=text('gen_random_uuid()') 
     )
     device_name: Mapped[str] = mapped_column(String, nullable= True)
     device_type: Mapped[str] = mapped_column(String, nullable=False)
     
     # Defaults handled both in-app and at database level via server_default
+    # timezone=True -> TIMESTAMPTZ, so the timezone-aware UTC datetimes from the app are stored as-is
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, server_default=func.now(), nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, server_default=func.now(), onupdate=func.now(), nullable=False
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
     )
 
     # One-to-Many Relationship to Readings
     readings: Mapped[list["ReadingDB"]] = relationship(
         back_populates="device", cascade="all, delete-orphan" # want all data deleted on it if device is deleted
+    )
+
+    alerts: Mapped[list["AlertDB"]] = relationship(
+        back_populates = "device", cascade="all, delete-orphan"
     )
 
 
@@ -48,10 +53,10 @@ class ReadingDB(Base):
     metric: Mapped[str] = mapped_column(String, nullable=False)
     unit: Mapped[str] = mapped_column(String, nullable=False)
     value: Mapped[float] = mapped_column(Float, nullable=False)
-    timestamp: Mapped[datetime] = mapped_column(DateTime, nullable=False)
-    
+    timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, server_default=func.now(), nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
     # Many-to-One Relationship back to Device
@@ -66,7 +71,7 @@ class AlertDB(Base):
         primary_key = True, default = uuid.uuid4, server_default = text('gen_random_uuid()')
         )
 
-    device_id = Mapped[uuid.UUID] = mapped_column(
+    device_id : Mapped[uuid.UUID] = mapped_column(
         ForeignKey("devices.device_id"), nullable =False
         )
 

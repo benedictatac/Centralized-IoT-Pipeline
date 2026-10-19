@@ -4,7 +4,6 @@ import pytest
 import json
 import uuid
 from datetime import datetime
-from tests.unit_tests.conftest import valid_payload
 
 class FakeMqttMsg:
     def __init__(self, topic, payload):

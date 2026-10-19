@@ -5,7 +5,9 @@ from src.pipeline.random_data_generator import random_data_generator
 
 class Detector:
 
-    def __init__(self, contamination: float = 0.1, random_state: int = 42): #setting contamination rate to 10% based on data numbers
+    #contamination = expected share of anomalies. random_data_generator() makes 19 hot readings out of 400 (~4.75%),
+    #so 0.05 matches the data; 0.1 forced the model to flag ~20 extra normal readings as anomalies
+    def __init__(self, contamination: float = 0.05, random_state: int = 42):
         self.model = IsolationForest(contamination=contamination, random_state=random_state)
         self.is_trained = False
 

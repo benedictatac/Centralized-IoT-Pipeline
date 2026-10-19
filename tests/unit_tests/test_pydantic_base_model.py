@@ -1,26 +1,13 @@
-from importlib import metadata
-from os import read
-import pathlib
-from src.models.baseModel import BaseModel, Device, DeviceType, Metric, Reading, Unit
-import uuid
-from datetime import datetime
+from src.models.baseModel import Device
+from datetime import datetime, timedelta, timezone
 import src.pipeline.Helper_Config
-import json
-import docker.mosquitto.data
-from pathlib import Path
 import pytest
 import pydantic
-from conftest import FILE_PATH, create_device_obj
+# the expected values live next to the fixture that uses them, so both always agree
+# (fixtures themselves are found by pytest automatically and must not be imported)
+from tests.unit_tests.conftest import FILE_PATH, DEVICETYPE, DEVICEID, DEVICENAME, DAYTIME, MOVEMENT, UNIT, VALUE
 #region members
 
-DEVICETYPE = DeviceType.CAMERA
-DEVICEID = uuid.uuid4()
-DEVICENAME = "Charles' device"
-DAYTIME = datetime.now()
-# STATUS = DeviceStatus.ACTIVE
-MOVEMENT = Metric.MOVEMENT
-UNIT = Unit.CELSIUS
-VALUE = 2.0
 INVALID_VALUE = "BANANA"
 
 #endregion
@@ -88,7 +75,7 @@ def test_invalid_readingmetric(create_device_obj):
 def test_invalid_readingunit(create_device_obj):
 
     bad_device = create_device_obj.model_dump()
-    bad_device["readings"][0]["value"] = INVALID_VALUE
+    bad_device["readings"][0]["unit"] = INVALID_VALUE
     with pytest.raises(pydantic.ValidationError):
         Device.model_validate(bad_device)
 
@@ -99,4 +86,22 @@ def test_invalid_readingvalue(create_device_obj):
 
     with pytest.raises(pydantic.ValidationError):
         Device.model_validate(bad_device)
+
+def test_naive_timestamp_is_treated_as_utc(create_device_obj):
+    device_data = create_device_obj.model_dump()
+    device_data["timestamp"] = datetime(2026, 10, 18, 12, 0) # no tzinfo
+
+    device = Device.model_validate(device_data)
+
+    assert device.timestamp == DAYTIME
+    assert device.timestamp.tzinfo == timezone.utc
+
+def test_offset_timestamp_is_converted_to_utc(create_device_obj):
+    device_data = create_device_obj.model_dump()
+    device_data["timestamp"] = "2026-10-18T14:00:00+02:00" # same instant as DAYTIME
+
+    device = Device.model_validate(device_data)
+
+    assert device.timestamp == DAYTIME
+    assert device.timestamp.utcoffset() == timedelta(0)
 #endregion testCases

@@ -17,7 +17,6 @@ os.environ.setdefault("RDS_NAME", "mock")
 
 from src.api.endpoints import app
 from src.pipeline.storage import get_db, ReadingDB
-from tests.unit_tests.conftest import mock_client
 
 
 
@@ -27,9 +26,10 @@ async def test_get_readings_endpoint(mock_client: AsyncClient):
     test_device_id = "2cc77e1a-9915-4c7b-8170-f01e0c1f1bd1"
 
     # Send GET request using the configured client fixture
+    # device_id is a path parameter on /events/{device_id}; /events ignores it as a query param
     response = await mock_client.get(
-        "/events", 
-        params={"device_id": test_device_id, "limit": 2}
+        f"/events/{test_device_id}",
+        params={"limit": 2}
     )
 
     # Assertions

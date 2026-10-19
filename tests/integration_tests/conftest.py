@@ -27,10 +27,13 @@ from src.pipeline.storage import upsert_device, insert_readings, store_event
 
 TEST_ASYNC_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
-@pytest.fixture(session = "session")
-async def mock_engine():
+@pytest_asyncio.fixture
+async def async_engine():
 
-    """Session-scoped async engine for SQLite in-memory testing."""
+    """
+    Function-scoped async engine for SQLite in-memory testing.
+    Function scope keeps the engine on the same event loop as the test using it.
+    """
     engine = create_async_engine(TEST_ASYNC_DATABASE_URL, echo=False)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -48,12 +51,6 @@ async def db_session(async_engine):
     Function-scoped AsyncSession wrapped in a rollback transaction.
     Guarantees complete test isolation without leaving state behind.
     """
-    async_session_factory = async_sessionmaker(
-        bind=async_engine,
-        class_=AsyncSession,
-        expire_on_commit=False,
-    )
-
     async with async_engine.connect() as conn:
         # Begin nested transaction
         trans = await conn.begin()

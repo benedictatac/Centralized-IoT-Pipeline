@@ -48,7 +48,8 @@ async def main():
             asyncio.run_coroutine_threadsafe(store_device(device), loop)
 
 
-    client = Client(settings.mqtt_host, settings.mqtt_port, PLACEHOLDER_CLIENT_ID,process_message, settings)
+    # handle_message (not process_message) so the validated device actually gets stored + cached
+    client = Client(settings.mqtt_host, settings.mqtt_port, PLACEHOLDER_CLIENT_ID, handle_message, settings)
     created_client= client.create_and_connect_client()
     print("MQTT listener started. Waiting for messages...")
     await asyncio.Event().wait()

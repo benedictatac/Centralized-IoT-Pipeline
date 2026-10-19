@@ -5,9 +5,9 @@ from dataclasses import dataclass
 from multiprocessing import Value
 from uuid import uuid4
 from xmlrpc.client import boolean
-from pydantic import UUID4, BaseModel, ConfigDict, Field 
+from pydantic import UUID4, BaseModel, ConfigDict, Field, field_validator
 import string
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 
 
@@ -45,6 +45,15 @@ class Device(BaseModel):
     device_name : str
     timestamp : datetime
     readings : list[Reading] = Field(default_factory=list)
+
+    #every timestamp leaves this model as timezone-aware UTC so it matches the TIMESTAMPTZ columns
+    #naive timestamps (no offset in the payload) are assumed to already be UTC
+    @field_validator("timestamp")
+    @classmethod
+    def normalize_to_utc(cls, value: datetime) -> datetime:
+        if value.tzinfo is None:
+            return value.replace(tzinfo=timezone.utc)
+        return value.astimezone(timezone.utc)
 
 class AlertReading(BaseModel):
     id : UUID4

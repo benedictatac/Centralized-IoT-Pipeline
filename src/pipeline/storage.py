@@ -47,8 +47,9 @@ async def upsert_device(device:Device, session:AsyncSession) -> DeviceDB:
         device_found = result.scalar_one_or_none()
         now = datetime.now(timezone.utc)
         #if device does not exist, we create a new one
-        if not device_found: 
-            new_device = DeviceDB(device_id = device.device_id, device_type = device.device_type, device_name = device.device_name)
+        if not device_found:
+            # .value -> the column is a String, so store "Thermostat" and not the DeviceType enum object
+            new_device = DeviceDB(device_id = device.device_id, device_type = device.device_type.value, device_name = device.device_name)
             session.add(new_device)
             return new_device
         
@@ -66,8 +67,8 @@ async def insert_readings(device:Device, session:AsyncSession) -> None:
         for reading in device.readings:
             new_reading = ReadingDB(
             device_id=device.device_id,
-            metric=reading.metric,
-            unit=reading.unit,
+            metric=reading.metric.value,
+            unit=reading.unit.value,
             value=reading.value,
             timestamp=device.timestamp
         )
