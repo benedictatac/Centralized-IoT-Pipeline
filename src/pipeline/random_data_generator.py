@@ -2,8 +2,7 @@
 from array import ArrayType
 import numpy as np
 
-
-
+from src.utilities import ranges
 
 def random_data_generator() -> ArrayType:
 
@@ -12,9 +11,9 @@ def random_data_generator() -> ArrayType:
 
     # --- 1. Day Readings (200 samples) ---
     # Hours: 8 to 22 | Temp: 20 to 24 C
-    day_hours = np.random.uniform(8.0, 22.0, 150)
+    day_hours = np.random.uniform(ranges.DAY_START_HOUR, ranges.DAY_END_HOUR, 150)
     # day_temps = np.random.uniform(20.0, 24.0, 150)
-    day_hours_outliers = np.random.uniform(8.0, 22.0, 50)
+    day_hours_outliers = np.random.uniform(ranges.DAY_START_HOUR, ranges.DAY_END_HOUR, 50)
     # day_temps_outliers = np.random.uniform(50, 100, 50)
     
     day_hours_overall = np.concatenate((day_hours, day_hours_outliers)) #concatenated 150 +50 where 50 are the outliers
@@ -22,8 +21,8 @@ def random_data_generator() -> ArrayType:
     day_mask = np.random.choice([0, 1], size=200, p=[0.9, 0.1])
     day_temperature = np.where(
         day_mask == 0, 
-        np.random.uniform(20.0, 24.0, 200),
-        np.random.uniform(50, 100, 200)
+        np.random.uniform(*ranges.DAY_TEMP_C, 200), # * unpacks (low, high) into two arguments
+        np.random.uniform(*ranges.ANOMALY_TEMP_C, 200)
         )
         
     X_day = np.column_stack((day_hours_overall, day_temperature))
@@ -37,13 +36,13 @@ def random_data_generator() -> ArrayType:
     night_mask = np.random.choice([0, 1], size=200)
     night_hours = np.where(
         night_mask == 0,
-        np.random.uniform(22.0, 24.0, 200),  # 22:00 - 24:00
-        np.random.uniform(0.0, 8.0, 200)     # 00:00 - 08:00
+        np.random.uniform(ranges.DAY_END_HOUR, 24.0, 200),  # 22:00 - 24:00
+        np.random.uniform(0.0, ranges.DAY_START_HOUR, 200)  # 00:00 - 08:00
     )
 
 
 
-    night_temps = np.random.uniform(17.0, 20.0, 200)
+    night_temps = np.random.uniform(*ranges.NIGHT_TEMP_C, 200)
     X_night = np.column_stack((night_hours, night_temps))
 
     # --- 3. Combined Feature Matrix X ---

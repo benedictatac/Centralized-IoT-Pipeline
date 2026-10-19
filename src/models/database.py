@@ -72,7 +72,8 @@ class AlertDB(Base):
         )
 
     device_id : Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("devices.device_id"), nullable =False
+        ForeignKey("devices.device_id"), nullable =False)
+    reading_id: Mapped[uuid.UUID] = mapped_column(
         )
 
     device: Mapped["DeviceDB"] = relationship(back_populates = 'alerts')

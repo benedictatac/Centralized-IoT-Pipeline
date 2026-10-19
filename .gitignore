@@ -219,3 +219,6 @@ __marimo__/
 
 
 .vs/
+
+# Simulator ground-truth anomaly log
+simulator_anomalies.csv

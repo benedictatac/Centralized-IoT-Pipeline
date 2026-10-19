@@ -52,7 +52,13 @@ async def main():
     client = Client(settings.mqtt_host, settings.mqtt_port, PLACEHOLDER_CLIENT_ID, handle_message, settings)
     created_client= client.create_and_connect_client()
     print("MQTT listener started. Waiting for messages...")
-    await asyncio.Event().wait()
+    try:
+        await asyncio.Event().wait()
+    finally:
+        #Ctrl+C cancels the wait above. disconnect ends the network thread, loop_stop waits for it to finish,
+        #so the broker sees a normal disconnect instead of waiting out its keep-alive timeout
+        created_client.disconnect()
+        created_client.loop_stop()
 
 
 

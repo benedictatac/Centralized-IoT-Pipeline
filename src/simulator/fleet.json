@@ -1,0 +1,43 @@
+{
+
+  "fleetOfDevices": [
+
+    {
+      "device_id": "72d30561-021b-4c0b-831d-55f1bc24c3c1",
+      "device_name": "Front Door Camera",
+      "device_type": "Camera",
+      "metric": "Movement",
+      "unit": "kmPerHour"
+    },
+    {
+      "device_id": "a710df08-4311-4084-b69e-4240f720a08c",
+      "device_name": "Living Room Light",
+      "device_type": "LightBulb",
+      "metric": "State",
+      "unit": "Boolean"
+    },
+    {
+      "device_id": "eba9c37a-7dcc-4e74-8750-5d5b5c98a11c",
+      "device_name": "Living Room Thermostat",
+      "device_type": "Thermostat",
+      "metric": "Temperature",
+      "unit": "Celsius"
+    },
+    {
+      "device_id": "fd6dfa73-dd28-497f-be6c-eeb0f52fbac9",
+      "device_name": "Kitchen Speaker",
+      "device_type": "Speaker",
+      "metric": "Volume",
+      "unit": "Decibel"
+    },
+    {
+      "device_id": "52c6ac30-8169-4ab8-b13d-5ecf78c9cedf",
+      "device_name": "Bedroom Thermostat",
+      "device_type": "Thermostat",
+      "metric": "Temperature",
+      "unit": "Celsius"
+    }
+
+  ]
+
+}
